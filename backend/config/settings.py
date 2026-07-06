@@ -26,9 +26,9 @@ INSTALLED_APPS = [
     "django.contrib.postgres",
     # Third party
     "rest_framework",
+    "rest_framework_simplejwt",
     "corsheaders",
     "taggit",
-    "treebeard",
     "drf_spectacular",
     "django_redis",
     "storages",

@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "postbuild": "next-sitemap --config next-sitemap.config.js"
   },
   "dependencies": {
     "next": "^16.2",
@@ -21,6 +22,7 @@
     "@tiptap/extension-placeholder": "^3.6",
     "@tiptap/extension-underline": "^3.6",
     "lowlight": "^3.1",
+    "shiki": "^3.1",
     "react-hot-toast": "^2.4",
     "clsx": "^2.1",
     "date-fns": "^4.1"
@@ -35,6 +37,7 @@
     "autoprefixer": "^10.4",
     "@tailwindcss/postcss": "^4.3",
     "eslint": "^9.0",
-    "eslint-config-next": "^16.2"
+    "eslint-config-next": "^16.2",
+    "next-sitemap": "^4.2"
   }
 }

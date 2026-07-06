@@ -1,8 +1,6 @@
 from celery import shared_task
-from django.db.models import Q
 from django.contrib.postgres.search import SearchVector
 from django.utils.html import strip_tags
-import json
 
 BANGLA_WPM = 160
 

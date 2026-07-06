@@ -1,7 +1,7 @@
 from rest_framework import viewsets, permissions, filters, status, generics
 from rest_framework.decorators import action
 from rest_framework.response import Response
-from rest_framework.parsers import FormParser, MultiPartParser
+
 from django.db.models import Q, F
 from .models import Post, Category, Comment, Bookmark
 from .serializers import (
@@ -100,11 +100,11 @@ class CommentViewSet(viewsets.ModelViewSet):
         return [permissions.AllowAny()]
 
     def get_queryset(self):
-        return Comment.objects.filter(
-            post__slug=self.kwargs["post_slug"],
-            parent=None,
-            is_deleted=False,
-        ).select_related("author__profile")
+        qs = Comment.objects.select_related("author__profile")
+        post_slug = self.kwargs.get("post_slug")
+        if post_slug:
+            qs = qs.filter(post__slug=post_slug, parent=None, is_deleted=False)
+        return qs
 
     def perform_create(self, serializer):
         post = generics.get_object_or_404(
@@ -133,6 +133,10 @@ class BookmarkViewSet(viewsets.ModelViewSet):
 
     @action(detail=False, methods=["delete"])
     def remove(self, request):
-        post_id = request.data.get("post")
-        Bookmark.objects.filter(user=request.user, post_id=post_id).delete()
+        post_id = request.query_params.get("post")
+        if not post_id:
+            return Response({"error": "post query parameter required"}, status=status.HTTP_400_BAD_REQUEST)
+        deleted, _ = Bookmark.objects.filter(user=request.user, post_id=post_id).delete()
+        if deleted == 0:
+            return Response({"error": "Bookmark not found"}, status=status.HTTP_404_NOT_FOUND)
         return Response(status=status.HTTP_204_NO_CONTENT)

@@ -41,7 +41,6 @@ class PostDetailSerializer(serializers.ModelSerializer):
     author_avatar = serializers.SerializerMethodField()
     category_name = serializers.SerializerMethodField()
     tags = TagListSerializerField()
-    author = serializers.SerializerMethodField()
 
     class Meta:
         model = Post

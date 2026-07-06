@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
 import { Navbar } from "@/components/Navbar";
@@ -14,22 +14,26 @@ export default function PostDetailPage() {
   const params = useParams();
   const [post, setPost] = useState<Post | null>(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  const fetchPost = useCallback(async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const data = await api.get<Post>(`/posts/${params.slug}/`);
+      setPost(data);
+      api.post(`/posts/${params.slug}/view/`, {}).catch(() => {});
+    } catch (err) {
+      console.error("Failed to load post", err);
+      setError(err instanceof Error ? err.message : "পোস্ট লোড করতে ব্যর্থ হয়েছে");
+    } finally {
+      setLoading(false);
+    }
+  }, [params.slug]);
 
   useEffect(() => {
-    async function fetchPost() {
-      try {
-        const data = await api.get<Post>(`/posts/${params.slug}/`);
-        setPost(data);
-        // Increment view count
-        api.post(`/posts/${params.slug}/view/`, {}).catch(() => {});
-      } catch (err) {
-        console.error("Failed to load post", err);
-      } finally {
-        setLoading(false);
-      }
-    }
     fetchPost();
-  }, [params.slug]);
+  }, [fetchPost]);
 
   if (loading) {
     return (
@@ -37,6 +41,23 @@ export default function PostDetailPage() {
         <Navbar />
         <main className="mx-auto max-w-3xl px-4 py-8">
           <p className="text-gray-500">লোড হচ্ছে...</p>
+        </main>
+      </>
+    );
+  }
+
+  if (error) {
+    return (
+      <>
+        <Navbar />
+        <main className="mx-auto max-w-3xl px-4 py-8 text-center">
+          <p className="text-red-600 mb-4">{error}</p>
+          <button
+            onClick={fetchPost}
+            className="rounded-md bg-blue-600 px-4 py-2 text-sm text-white hover:bg-blue-700"
+          >
+            পুনরায় চেষ্টা করুন
+          </button>
         </main>
       </>
     );
@@ -58,7 +79,6 @@ export default function PostDetailPage() {
       <Navbar />
       <main className="mx-auto max-w-3xl px-4 py-8">
         <article>
-          {/* Meta */}
           <div className="mb-8">
             <div className="flex items-center gap-3 text-sm text-gray-500 mb-2">
               {post.category_name && (
@@ -101,7 +121,6 @@ export default function PostDetailPage() {
             </div>
           </div>
 
-          {/* Cover Image */}
           {post.cover_image && (
             <img
               src={post.cover_image}
@@ -110,7 +129,6 @@ export default function PostDetailPage() {
             />
           )}
 
-          {/* Content */}
           <div className="prose prose-lg max-w-none mb-12">
             {post.content_html ? (
               <div dangerouslySetInnerHTML={{ __html: post.content_html }} />
@@ -120,7 +138,6 @@ export default function PostDetailPage() {
           </div>
         </article>
 
-        {/* Comments */}
         <Comments postSlug={params.slug as string} />
       </main>
     </>
