@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+Disallow: /api/
+Disallow: /write/
+Disallow: /dashboard/
+
+Sitemap: https://banglatechblog.com/sitemap.xml
