@@ -9,6 +9,8 @@ const nextConfig = {
       },
     ],
   },
+  // Turbopack is the default bundler in Next.js 16
+  // No need for webpack config unless custom rules are needed
 };
 
-module.exports = nextConfig;
+export default nextConfig;

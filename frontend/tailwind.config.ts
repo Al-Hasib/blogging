@@ -1,19 +1,5 @@
-import type { Config } from "tailwindcss";
-
-const config: Config = {
-  content: [
-    "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
-    "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
-    "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
-  ],
-  theme: {
-    extend: {
-      fontFamily: {
-        bengali: ["var(--font-noto-sans-bengali)", "Hind Siliguri", "SolaimanLipi", "sans-serif"],
-      },
-    },
-  },
-  plugins: [],
-};
-
-export default config;
+// Tailwind CSS v4 uses CSS-first configuration.
+// Font family and theme customization is done in globals.css via @theme directives.
+// This file is kept as a placeholder for potential v4-compatible config needs.
+// See globals.css for theme setup.
+export default {};
