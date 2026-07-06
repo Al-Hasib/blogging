@@ -3,8 +3,8 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
-from apps.users.views import PublicUserView
-from apps.blog.feeds import LatestPostsFeed
+from services.users.views import PublicUserView
+from services.blog.feeds import LatestPostsFeed
 
 urlpatterns = [
     path("admin/", admin.site.urls),

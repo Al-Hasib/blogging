@@ -32,10 +32,11 @@ INSTALLED_APPS = [
     "drf_spectacular",
     "django_redis",
     "storages",
-    # Local apps
-    "apps.users",
-    "apps.blog",
-    "apps.search",
+    # Services (modular monolith)
+    "services.auth",
+    "services.users",
+    "services.blog",
+    "services.search",
 ]
 
 MIDDLEWARE = [
@@ -71,7 +72,12 @@ WSGI_APPLICATION = "config.wsgi.application"
 
 DATABASES = {
     "default": env.db("DATABASE_URL", default="postgres://blogging_user:blogging_pass@db:5432/blogging_db"),
+    "auth_db": env.db("AUTH_DATABASE_URL", default="postgres://blogging_user:blogging_pass@db:5432/blogging_db"),
+    "user_db": env.db("USER_DATABASE_URL", default="postgres://blogging_user:blogging_pass@db:5432/blogging_db"),
+    "blog_db": env.db("BLOG_DATABASE_URL", default="postgres://blogging_user:blogging_pass@db:5432/blogging_db"),
 }
+
+DATABASE_ROUTERS = ["config.routers.ServiceDatabaseRouter"]
 
 AUTH_PASSWORD_VALIDATORS = [
     {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator"},

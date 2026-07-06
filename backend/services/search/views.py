@@ -6,8 +6,8 @@ from django.contrib.postgres.search import (
     TrigramSimilarity,
 )
 from django.db.models import Q
-from apps.blog.models import Post
-from apps.blog.serializers import PostListSerializer
+from services.blog.models import Post
+from services.blog.serializers import PostListSerializer
 
 class SearchView(generics.ListAPIView):
     serializer_class = PostListSerializer
