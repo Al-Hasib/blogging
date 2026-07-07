@@ -10,10 +10,10 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("api/v1/schema/", SpectacularAPIView.as_view(), name="schema"),
     path("api/v1/docs/", SpectacularSwaggerView.as_view(url_name="schema"), name="docs"),
-    path("api/v1/auth/", include("apps.users.urls")),
+    path("api/v1/auth/", include("services.users.urls")),
     path("api/v1/users/<username>/", PublicUserView.as_view(), name="user-detail"),
-    path("api/v1/", include("apps.blog.urls")),
-    path("api/v1/", include("apps.search.urls")),
+    path("api/v1/", include("services.blog.urls")),
+    path("api/v1/", include("services.search.urls")),
     path("rss/", LatestPostsFeed(), name="rss-feed"),
 ]
 
